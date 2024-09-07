@@ -1,0 +1,46 @@
+---
+volumes:
+  postgres_data:
+
+services:
+  trustdidweb-server:
+    build:
+      context: ./
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN}
+      SECRET_KEY: ${SECRET_KEY}
+      POSTGRES_URI: 'postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/trustdidweb-server'
+      ENDORSER_MULTIKEY: ${ENDORSER_MULTIKEY}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.trustdidweb-server.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.trustdidweb-server.entrypoints=websecure
+      - traefik.http.routers.trustdidweb-server.tls.certresolver=myresolver
+      - traefik.http.services.trustdidweb-server.loadbalancer.server.port=8000
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  traefik:
+    image: traefik:v2.10
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+    ports:
+      - 443:443
+    volumes:
+      - .letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
