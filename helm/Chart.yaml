@@ -1,6 +1,6 @@
 apiVersion: v2
-name: aries-did-web-server
-description: An api server to register and serve web dids.
+name: trustdidweb-server-py
+description: An api server to register and serve trusted web dids.
 type: application
 
 # This is the chart version. This version number should be incremented each time you make changes

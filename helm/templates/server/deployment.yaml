@@ -38,7 +38,7 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: aries-did-web-postgresql
+                  name: trustdidweb-server-py-postgresql
                   key: password
             - name: POSTGRES_URI
               value: postgres://{{ .Values.postgresql.auth.username }}:$(POSTGRES_PASSWORD)@{{ include "global.postgresql.fullname" . }}:{{ .Values.postgresql.primary.service.ports.postgresql }}

@@ -1,6 +1,6 @@
 ---
-nameOverride: "aries-did-web-server"
-fullnameOverride: "aries-did-web-server"
+nameOverride: "trustdidweb-server-py"
+fullnameOverride: "trustdidweb-server-py"
 ingressSuffix: ""
 
 selectorLabels: {}
@@ -28,7 +28,7 @@ networkPolicy:
 
 server:
   image:
-    repository: ghcr.io/bcgov/aries-did-web-server
+    repository: ghcr.io/bcgov/trustdidweb-server-py
     pullPolicy: IfNotPresent
     pullSecrets: []
     tag: 0.1.0
@@ -64,8 +64,8 @@ server:
 
 postgresql:
   enabled: true
-  fullnameOverride: "aries-did-web-postgresql"
-  nameOverride: "aries-did-web-postgresql"
+  fullnameOverride: "trustdidweb-server-py-postgresql"
+  nameOverride: "trustdidweb-server-py-postgresql"
   architecture: standalone
   auth:
     enablePostgresUser: true
@@ -73,8 +73,8 @@ postgresql:
     secretKeys:
       adminPasswordKey: admin-password
       userPasswordKey: database-password
-    database: aries-did-web-server
-    username: aries-did-web-server
+    database: trustdidweb-server-py
+    username: trustdidweb-server-py
 
   ## PostgreSQL Primary parameters
   primary:
